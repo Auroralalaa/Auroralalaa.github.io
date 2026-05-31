@@ -1,0 +1,101 @@
+{{- /* 仅在首页显示热力图 */ -}}
+{{- if .IsHome }}
+<div id="heatmap-widget-placeholder"></div>
+<script>
+(function () {
+  var WEEKS = 18;
+  var DAYS = WEEKS * 7;
+  var DAY_LABELS = ['日', '一', '二', '三', '四', '五', '六'];
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function formatDate(d) {
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  }
+
+  function buildHeatmap() {
+    var dates = window.__blogDates || [];
+    var total = window.__blogTotal || dates.length;
+
+    // 统计每天文章数
+    var counts = {};
+    dates.forEach(function (d) {
+      if (d) counts[d] = (counts[d] || 0) + 1;
+    });
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // 找到18周前的起始周日
+    var start = new Date(today);
+    start.setDate(start.getDate() - DAYS + 1);
+    var dow = start.getDay();
+    start.setDate(start.getDate() - dow); // 对齐到周日
+
+    // 构建网格：weeks 列 × 7 行
+    var grid = [];
+    for (var w = 0; w < WEEKS; w++) {
+      var week = [];
+      for (var d = 0; d < 7; d++) {
+        var dt = new Date(start);
+        dt.setDate(start.getDate() + w * 7 + d);
+        var ds = formatDate(dt);
+        var cnt = counts[ds] || 0;
+        var future = dt > today;
+        var level = future ? 'future' : cnt === 0 ? 'level-0' : cnt === 1 ? 'level-1' : cnt <= 3 ? 'level-2' : cnt <= 6 ? 'level-3' : 'level-4';
+        week.push('<div class="heatmap-cell ' + level + '" title="' + ds + (cnt ? '：' + cnt + ' 篇' : '') + '"></div>');
+      }
+      grid.push('<div class="heatmap-week">' + week.join('') + '</div>');
+    }
+
+    // 星期标签（只显示奇数行）
+    var labels = DAY_LABELS.map(function (l, i) {
+      return '<span>' + (i % 2 === 1 ? l : '') + '</span>';
+    }).join('');
+
+    var html = '<div class="heatmap-widget">'
+      + '<div class="heatmap-header">'
+      + '<div><span class="heatmap-label">内容更新</span><p class="heatmap-subtitle">最近 ' + WEEKS + ' 周活跃记录</p></div>'
+      + '<div class="heatmap-total">' + total + '<small>次更新</small></div>'
+      + '</div>'
+      + '<div class="heatmap-body">'
+      + '<div class="heatmap-day-labels">' + labels + '</div>'
+      + '<div class="heatmap-weeks">' + grid.join('') + '</div>'
+      + '</div>'
+      + '</div>';
+
+    return html;
+  }
+
+  function inject() {
+    var placeholder = document.getElementById('heatmap-widget-placeholder');
+    if (!placeholder) return;
+
+    // 找到文章列表的父容器，插到文章列表之前
+    var postList = document.querySelector('.posts-list, #post-list, main .post-entry, main article');
+    var target = postList ? postList.parentNode : null;
+
+    var wrapper = document.createElement('div');
+    wrapper.innerHTML = buildHeatmap();
+
+    if (target && postList) {
+      target.insertBefore(wrapper.firstChild, postList);
+    } else {
+      // 兜底：插到 main 标签开头
+      var main = document.querySelector('main, #main-content, .main');
+      if (main) {
+        main.insertBefore(wrapper.firstChild, main.firstChild);
+      } else {
+        placeholder.parentNode.insertBefore(wrapper.firstChild, placeholder);
+      }
+    }
+    placeholder.remove();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inject);
+  } else {
+    inject();
+  }
+})();
+</script>
+{{- end }}

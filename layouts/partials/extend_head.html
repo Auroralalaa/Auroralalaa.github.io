@@ -1,0 +1,118 @@
+<style>
+.heatmap-widget {
+  background: var(--entry);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+
+.heatmap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.heatmap-label {
+  font-size: 13px;
+  color: var(--secondary);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.heatmap-subtitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary);
+  margin: 0;
+}
+
+.heatmap-total {
+  text-align: right;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.heatmap-total small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--secondary);
+  margin-top: 2px;
+}
+
+.heatmap-body {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.heatmap-day-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 1px;
+}
+
+.heatmap-day-labels span {
+  font-size: 10px;
+  color: var(--secondary);
+  height: 11px;
+  line-height: 11px;
+  width: 12px;
+  text-align: center;
+}
+
+.heatmap-weeks {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.heatmap-week {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.heatmap-cell {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  cursor: default;
+  transition: opacity 0.2s;
+}
+
+.heatmap-cell:hover {
+  opacity: 0.75;
+  outline: 1px solid var(--primary);
+}
+
+/* Light mode */
+.heatmap-cell.level-0  { background-color: var(--code-bg, #f0f0f0); }
+.heatmap-cell.level-1  { background-color: #c6e48b; }
+.heatmap-cell.level-2  { background-color: #7bc96f; }
+.heatmap-cell.level-3  { background-color: #239a3b; }
+.heatmap-cell.level-4  { background-color: #196127; }
+.heatmap-cell.future   { background-color: transparent; }
+
+/* Dark mode */
+.dark .heatmap-cell.level-0  { background-color: #161b22; }
+.dark .heatmap-cell.level-1  { background-color: #0e4429; }
+.dark .heatmap-cell.level-2  { background-color: #006d32; }
+.dark .heatmap-cell.level-3  { background-color: #26a641; }
+.dark .heatmap-cell.level-4  { background-color: #39d353; }
+</style>
+
+{{- /* 将所有文章日期注入为 JS 变量，供热力图使用 */ -}}
+<script>
+(function() {
+  var dates = [{{ range site.RegularPages }}"{{ .Date.Format "2006-01-02" }}",{{ end }}];
+  window.__blogDates = dates;
+  window.__blogTotal = {{ len site.RegularPages }};
+})();
+</script>
