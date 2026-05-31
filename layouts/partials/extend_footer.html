@@ -25,11 +25,10 @@
     var today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // 找到18周前的起始周日
+    // 从本周周日往前推 17 周，确保今天始终落在最后一列
     var start = new Date(today);
-    start.setDate(start.getDate() - DAYS + 1);
-    var dow = start.getDay();
-    start.setDate(start.getDate() - dow); // 对齐到周日
+    start.setDate(start.getDate() - start.getDay());        // 本周周日
+    start.setDate(start.getDate() - (WEEKS - 1) * 7);      // 往前 17 周
 
     // 构建网格：weeks 列 × 7 行
     var grid = [];

@@ -108,11 +108,11 @@
 .dark .heatmap-cell.level-4  { background-color: #39d353; }
 </style>
 
-{{- /* 将所有文章日期注入为 JS 变量，供热力图使用 */ -}}
+{{- /* 将所有文章日期注入为 JS 变量，供热力图使用（跳过无日期页面）*/ -}}
 <script>
 (function() {
-  var dates = [{{ range site.RegularPages }}"{{ .Date.Format "2006-01-02" }}",{{ end }}];
+  var dates = [{{ range site.RegularPages }}{{ if not .Date.IsZero }}"{{ .Date.Format "2006-01-02" }}",{{ end }}{{ end }}];
   window.__blogDates = dates;
-  window.__blogTotal = {{ len site.RegularPages }};
+  window.__blogTotal = dates.length;
 })();
 </script>
