@@ -1,0 +1,78 @@
+baseURL: "https://Auroralalaa.github.io/"
+languageCode: "zh-cn"
+title: "硅基侵略"
+theme: PaperMod
+paginate: 10
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+params:
+  env: production
+  title: 硅基侵略
+  description: "硅基侵略 - lychu 的个人博客"
+  keywords: [Blog, 博客]
+  author: lychu
+  images: [""]
+
+  defaultTheme: auto
+  disableThemeToggle: false
+
+  ShowReadingTime: true
+  ShowShareButtons: false
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  ShowToc: true
+  TocOpen: false
+  disableScrollToTop: false
+
+  homeInfoParams:
+    Title: "👋 你好，我是 lychu"
+    Content: "欢迎来到硅基侵略 —— 这里记录我的技术探索与思考"
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/Auroralalaa"
+
+  editPost:
+    URL: "https://github.com/Auroralalaa/Auroralalaa.github.io/edit/main/content"
+    Text: "建议修改"
+    appendFilePath: true
+
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
+
+menu:
+  main:
+    - identifier: archives
+      name: 归档
+      url: /archives/
+      weight: 10
+    - identifier: tags
+      name: 标签
+      url: /tags/
+      weight: 20
+    - identifier: search
+      name: 搜索
+      url: /search/
+      weight: 30
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
