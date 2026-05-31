@@ -40,7 +40,7 @@
         var ds = formatDate(dt);
         var cnt = counts[ds] || 0;
         var future = dt > today;
-        var level = future ? 'future' : cnt === 0 ? 'level-0' : cnt === 1 ? 'level-1' : cnt <= 3 ? 'level-2' : cnt <= 6 ? 'level-3' : 'level-4';
+        var level = (future || cnt === 0) ? 'level-0' : cnt === 1 ? 'level-1' : cnt <= 3 ? 'level-2' : cnt <= 6 ? 'level-3' : 'level-4';
         week.push('<div class="heatmap-cell ' + level + '" title="' + ds + (cnt ? '：' + cnt + ' 篇' : '') + '"></div>');
       }
       grid.push('<div class="heatmap-week">' + week.join('') + '</div>');
