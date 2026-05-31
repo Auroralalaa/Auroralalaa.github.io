@@ -1,5 +1,5 @@
 baseURL: "https://Auroralalaa.github.io/"
-languageCode: "zh-cn"
+locale: "zh-cn"
 title: "硅基侵略"
 theme: PaperMod
 paginate: 10
